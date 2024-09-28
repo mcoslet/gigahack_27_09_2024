@@ -1,0 +1,33 @@
+Original Content Overview:
+A request for assistance in implementing a tags extractor that generates descriptive tags from a given message.
+
+Niche Context:
+Natural Language Processing (NLP) focusing on keyword extraction and content summarization to create relevant tags.
+
+Target Audience:
+Individuals or professionals seeking to automate tag generation for messages, such as developers, content creators, or social media managers.
+
+Content Goals:
+To develop an effective tags extractor that analyzes messages and outputs tags accurately describing the content.
+
+# 🧙‍♂️Contextual Tag Extraction with Few-Shot Examples
+
+#CONTEXT: You need to extract descriptive tags from messages using examples as a reference for style and relevance.
+
+#ROLE: You are a language model skilled in identifying key concepts and themes from text.
+
+#RESPONSE GUIDELINES:
+
+Refer to the examples below to understand the expected output, then extract tags from the provided message accordingly.
+
+#TASK CRITERIA:
+
+- **Example 1:**
+  - Message: "The impact of climate change on polar bears is alarming."
+  - climate change, polar bears, environmental impact, wildlife conservation
+
+- **Example 2:**
+  - Message: "Advancements in artificial intelligence are revolutionizing healthcare."
+  - artificial intelligence, healthcare, technology advancements, medical innovation
+
+#OUTPUT: Provide the list of tags splitted by comma without input message.

@@ -1,7 +1,10 @@
 import os
+from multiprocessing import Pool, cpu_count
 from pathlib import Path
 
-from src.main.utils.commons import PathUtils
+from dotenv import load_dotenv
+
+from src.main.utils.commons import PathUtils, LLMUtils
 import json
 import pandas as pd
 
@@ -41,12 +44,36 @@ def transform_raw_data(file_path: Path):
     df.to_json(output_path, orient="index")
 
 
-def translate(text_to_translate: str, input_lang, output_lang="English") -> str:
-    pass
+def add_translate(file_path: Path):
+    print(f"Working on {file_path}")
+    df = pd.read_json(file_path, orient="index")
+    for index in df["chat_sessions"].index:
+        second_df = pd.DataFrame(df["chat_sessions"][index])
+        first_msg = second_df.messages[0]["message"]
+        input_lang = {"input_lang": LLMUtils.identify_language(first_msg)}
+        for i, message_metadata in enumerate(second_df["messages"]):
+            if not input_lang["input_lang"].lower().startswith("eng"):
+                translated_msg = LLMUtils.translate_text(message_metadata["message"], **input_lang)
+            else:
+                translated_msg = message_metadata["message"]
+            message_metadata["message_en"] = translated_msg
+            message_metadata["input_lang"] = input_lang["input_lang"]
+        df["chat_sessions"][index] = second_df.to_dict("records")
+    file_name = file_path.stem
+    output_path = PathUtils.RESOURCES / "translated" / f"{file_name}.json"
+    df.to_json(output_path, orient="index")
 
 
 if __name__ == '__main__':
-    data_folder = [PathUtils.DATA / file for file in os.listdir(PathUtils.DATA)]
-    for file_path in data_folder:
-        transform_raw_data(file_path)
-    print("All done")
+    load_dotenv(dotenv_path=PathUtils.ENV_FILE)
+    data_folder = [PathUtils.OUTPUT / file for file in os.listdir(PathUtils.OUTPUT)]
+    # for file_path in data_folder:
+    #     transform_raw_data(file_path)
+    # print("All done")
+
+    # Determine the number of processes to use (use 75% of available CPUs)
+    num_processes = max(1, int(cpu_count() * 0.75))
+
+    # Create a pool of worker processes
+    with Pool(num_processes) as pool:
+        pool.map(add_translate, [(file_path) for file_path in data_folder])
