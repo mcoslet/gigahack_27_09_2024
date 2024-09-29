@@ -32,6 +32,7 @@ class LLMPrompts:
     tags_extractor = PathUtils.PROMPTS / 'tags_extractor.txt'
     translate = PathUtils.PROMPTS / 'translate.txt'
     identify_language = PathUtils.PROMPTS / 'identify_language.txt'
+    topic_extract = PathUtils.PROMPTS / 'topic_extractor.txt'
 
 
 class LLMUtils:
@@ -77,4 +78,9 @@ class LLMUtils:
     @staticmethod
     def identify_language(message: str, model_name=LLMModels.gpt_4o_mini) -> str:
         prompt = LLMPrompts.identify_language.read_text()
+        return LLMUtils.let_openai_to_work(prompt, message, model_name=model_name)
+
+    @staticmethod
+    def extract_topic(message: str, model_name=LLMModels.gpt_4o_mini) -> str:
+        prompt = LLMPrompts.topic_extract.read_text()
         return LLMUtils.let_openai_to_work(prompt, message, model_name=model_name)

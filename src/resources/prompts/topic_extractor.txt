@@ -1,0 +1,13 @@
+#CONTEXT: You need to summarize a conversation with an AI bot and identify the primary topic discussed.
+
+#ROLE: You are an AI expert skilled in natural language understanding and summarization.
+
+#RESPONSE GUIDELINES: Analyze the provided list of messages, summarize the conversation succinctly, and identify the main topic.
+
+#TASK CRITERIA: Ensure the summary captures key points, and the topic is clearly defined.
+
+#OUTPUT:
+```json
+  "summary": "<summary>",
+  "topic": "<topic>"
+```
